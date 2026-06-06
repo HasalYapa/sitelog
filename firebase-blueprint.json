@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "WorkforceEntry": {
+      "title": "Workforce Entry",
+      "description": "A single category count for workforce.",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string" },
+        "count": { "type": "number" },
+        "color": { "type": "string" }
+      },
+      "required": ["category", "count", "color"]
+    },
+    "MachineryEntry": {
+      "title": "Machinery Entry",
+      "description": "Equipment status and hours.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["Active", "Idle", "Maintenance"] },
+        "hours": { "type": "number" },
+        "startTime": { "type": "string" }
+      },
+      "required": ["id", "name", "status", "hours", "startTime"]
+    }
+  },
+  "firestore": {
+    "workforce/{categoryId}": {
+      "schema": "WorkforceEntry",
+      "description": "Workforce counts by category."
+    },
+    "machinery/{equipmentId}": {
+      "schema": "MachineryEntry",
+      "description": "Machinery status and tracking."
+    }
+  }
+}

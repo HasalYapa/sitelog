@@ -1,0 +1,95 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidWorkforceEntry(data) {
+      return data.category is string && data.category.size() <= 128
+          && data.count is number && data.count >= 0
+          && data.color is string && data.color.size() <= 128;
+    }
+
+    match /workforce/{categoryId} {
+      allow read: if isSignedIn();
+      
+      allow create: if isSignedIn() 
+        && isValidId(categoryId)
+        && isValidWorkforceEntry(incoming());
+
+      allow update: if isSignedIn()
+        && isValidWorkforceEntry(incoming());
+        
+      allow delete: if isSignedIn();
+    }
+
+    function isValidMachineryEntry(data) {
+      return data.id is string && data.id.size() <= 64
+          && data.name is string && data.name.size() <= 128
+          && data.status is string && data.status in ['Active', 'Idle', 'Maintenance']
+          && data.hours is number && data.hours >= 0
+          && (!('startTime' in data) || data.startTime is string)
+          && (!('endTime' in data) || data.endTime is string);
+    }
+
+    match /machinery/{equipmentId} {
+      allow read: if isSignedIn();
+      
+      allow create: if isSignedIn()
+        && isValidId(equipmentId)
+        && isValidMachineryEntry(incoming());
+
+      allow update: if isSignedIn()
+        && isValidMachineryEntry(incoming());
+        
+      allow delete: if isSignedIn();
+    }
+
+    function isValidDailyLogEntry(data) {
+      return data.summary is string 
+          && data.milestones is string 
+          && data.subcontractor is string
+          && (!('timestamp' in data) || data.timestamp is timestamp);
+    }
+
+    match /daily_logs/{logId} {
+      allow read, delete: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidDailyLogEntry(incoming());
+    }
+
+    function isValidPhotoEntry(data) {
+      return data.url is string 
+          && data.time is string;
+    }
+
+    match /photos/{photoId} {
+      allow read, delete: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidPhotoEntry(incoming());
+    }
+
+    function isValidReportEntry(data) {
+      return data.type is string
+          && data.date is string;
+    }
+
+    match /reports/{reportId} {
+      allow read, delete: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidReportEntry(incoming());
+    }
+  }
+}
