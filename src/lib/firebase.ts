@@ -4,8 +4,9 @@ import { getFirestore } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const customConfig = {
-  ...firebaseConfig,
-  authDomain: 'sitelog-two.vercel.app'
+  ...firebaseConfig
+  // authDomain must remain the default (projectId.firebaseapp.com) for OAuth to work, 
+  // do NOT set it to the vercel app url unless you have configured custom auth domains via Firebase Hosting.
 };
 
 const app = initializeApp(customConfig);
@@ -18,6 +19,17 @@ export const signInWithGoogle = async () => {
     await signInWithPopup(auth, provider);
   } catch (error: any) {
     console.error("Error signing in with Google", error);
-    alert(`Sign-in failed: ${error.message} \n\nIf you recently deployed, please ensure the URL is added to the "Authorized domains" list in your Firebase Console (Authentication > Settings).`);
+    
+    if (error.code === 'auth/popup-closed-by-user') {
+      // User closed the popup, no need to alert them
+      return;
+    }
+    
+    if (error.code === 'auth/unauthorized-domain') {
+      alert("Sign-in failed: Unauthorized domain.\n\nPlease go to Firebase Console > Authentication > Settings > Authorized Domains and add 'sitelog-two.vercel.app' to the list.");
+      return;
+    }
+
+    alert(`Sign-in failed: ${error.message}\n\nMake sure your Firebase 'authDomain' is correct (usually your-project.firebaseapp.com) and your vercel URL is added to Authorized Domains in Firebase console.`);
   }
 };
