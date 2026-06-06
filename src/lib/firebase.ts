@@ -4,9 +4,8 @@ import { getFirestore } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const customConfig = {
-  ...firebaseConfig
-  // authDomain must remain the default (projectId.firebaseapp.com) for OAuth to work, 
-  // do NOT set it to the vercel app url unless you have configured custom auth domains via Firebase Hosting.
+  ...firebaseConfig,
+  authDomain: 'sitelog-two.vercel.app'
 };
 
 const app = initializeApp(customConfig);
