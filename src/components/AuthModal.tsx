@@ -49,8 +49,8 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
                 <div className="space-y-4 mb-6">
                   <button 
-                    onClick={() => {
-                      signIn();
+                    onClick={async () => {
+                      await signIn();
                       onClose();
                     }}
                     className="w-full flex items-center justify-center gap-3 bg-white border border-slate-300 text-slate-700 px-4 py-3 rounded-xl font-medium hover:bg-slate-50 transition-colors"

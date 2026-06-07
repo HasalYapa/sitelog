@@ -1,5 +1,6 @@
 import {
   BarChart2,
+  Calendar,
   Cloud,
   FileText,
   Home,
@@ -12,10 +13,11 @@ import {
 import React, { useState, useEffect } from 'react';
 import { useProject } from '../lib/ProjectContext';
 
-export type TabName = 'Home' | 'Daily Logs' | 'Workforce' | 'Machinery' | 'Weather' | 'Photos' | 'Reports';
+export type TabName = 'Home' | 'Daily Logs' | 'Workforce' | 'Machinery' | 'Weather' | 'Photos' | 'Reports' | 'Schedule';
 
 const navItems: { name: TabName; icon: any }[] = [
   { name: 'Home', icon: Home },
+  { name: 'Schedule', icon: Calendar },
   { name: 'Daily Logs', icon: FileText },
   { name: 'Workforce', icon: Users },
   { name: 'Machinery', icon: Tractor },

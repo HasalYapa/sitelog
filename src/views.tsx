@@ -9,6 +9,9 @@ import { WeatherDashboard } from './components/WeatherDashboard';
 import { WorkforceChart } from './components/WorkforceChart';
 import { WorkforceForm } from './components/WorkforceForm';
 import { ReportsDashboard } from './components/ReportsDashboard';
+import { ScheduleDashboard } from './components/ScheduleDashboard';
+import { ProjectProgressChart } from './components/ProjectProgressChart';
+import { TomorrowWeatherAlert } from './components/TomorrowWeatherAlert';
 import { useProject } from './lib/ProjectContext';
 
 export function HomeView() {
@@ -22,6 +25,7 @@ export function HomeView() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
+      <TomorrowWeatherAlert />
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard overview</h1>
@@ -33,14 +37,20 @@ export function HomeView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <ProjectProgressChart />
+        </div>
+        <div className="lg:col-span-1">
           <WeatherWidget />
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="col-span-1">
           <WorkforceChart />
         </div>
-        <div className="col-span-1 md:col-span-2 lg:col-span-1">
+        <div className="col-span-1 md:col-span-2 lg:col-span-2">
           <MachineryStatus />
         </div>
       </div>
@@ -134,6 +144,18 @@ export function ReportsView() {
         <p className="text-sm text-slate-500 mt-1">Generate and view project reports.</p>
       </div>
       <ReportsDashboard />
+    </div>
+  );
+}
+
+export function ScheduleView() {
+  return (
+    <div className="max-w-6xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Project Schedule</h1>
+        <p className="text-sm text-slate-500 mt-1">Manage project tasks and automatically schedule based on dependencies.</p>
+      </div>
+      <ScheduleDashboard />
     </div>
   );
 }

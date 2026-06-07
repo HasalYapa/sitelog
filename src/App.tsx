@@ -13,6 +13,7 @@ import {
   ReportsView,
   WeatherView,
   WorkforceView,
+  ScheduleView,
 } from './views';
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
             <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
             <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
               {activeTab === 'Home' && <HomeView />}
+              {activeTab === 'Schedule' && <ScheduleView />}
               {activeTab === 'Daily Logs' && <DailyLogsView />}
               {activeTab === 'Workforce' && <WorkforceView />}
               {activeTab === 'Machinery' && <MachineryView />}

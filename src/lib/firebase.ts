@@ -4,8 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const customConfig = {
-  ...firebaseConfig,
-  authDomain: 'sitelog-two.vercel.app'
+  ...firebaseConfig
 };
 
 const app = initializeApp(customConfig);
@@ -18,9 +17,10 @@ export const signInWithGoogle = async () => {
     await signInWithPopup(auth, provider);
   } catch (error: any) {
     console.error("Error signing in with Google", error);
-    
-    if (error.code === 'auth/popup-closed-by-user') {
-      // User closed the popup, no need to alert them
+
+    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      // User closed the popup or a concurrent request cancelled it
+      alert("Sign in was cancelled or failed. Please ensure you are not blocking popups and try again.");
       return;
     }
     
